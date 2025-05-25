@@ -21,7 +21,7 @@ public class MenuScreen implements Screen {
     private BitmapFont font;
     Music music;
     Texture logoiade;
-
+aaaa
     private final String[] menuItems = {"Jogar", "Opções", "Sair"};
     private int selectedIndex = 0;
 
