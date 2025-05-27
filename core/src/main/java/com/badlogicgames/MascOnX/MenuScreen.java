@@ -4,26 +4,34 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 /** First screen of the application. Displayed after the application is created. */
 public class MenuScreen implements Screen {
 
     private final MainX game;
-    private SpriteBatch batch;
+    private SpriteBatch spriteBatch;
     private Texture background;
     private Texture axe;
+    private  Texture logoiadeTexture;
+    private Texture titleTexture;
     private BitmapFont font;
-    Music music;
-    Texture logoiade;
-
-    private final String[] menuItems = {"Jogar", "Opções", "Sair"};
-    private int selectedIndex = 0;
+    private Music music;
+    private FitViewport viewport;
+    private Texture buttonTexture;
+    private TextureRegion[] buttonRegions;
+    private Rectangle[] buttonBounds;
 
 
     public MenuScreen(MainX mainX) {
@@ -32,123 +40,189 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
+
+        spriteBatch = new SpriteBatch();
+        viewport = new FitViewport(19, 10.2f);
+
         background = new Texture("menu_background.png"); // substitua pela sua imagem
         axe = new Texture("axe.png"); // imagem do machado
+        logoiadeTexture = new Texture("IADE.png");
+        titleTexture = new Texture("mascon.png");
         font = new BitmapFont(); // Fonte padrão, sem dependência externa
 
-        // Prepare your screen here.
-        Gdx.input.setInputProcessor(new InputAdapter(){
 
-    public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.UP) {
-            selectedIndex = (selectedIndex + menuItems.length - 1) % menuItems.length;
-        } else if (keycode == Input.Keys.DOWN) {
-            selectedIndex = (selectedIndex + 1) % menuItems.length;
-        } else if (keycode == Input.Keys.ENTER) {
-            handleSelection();
+        music = Gdx.audio.newMusic(Gdx.files.internal("menumusic.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.5f);
+        music.play();
+
+        buttonTexture = new Texture("menu_buttons.png");
+
+        TextureRegion[][] tmp = TextureRegion.split(buttonTexture,
+            buttonTexture.getWidth(), buttonTexture.getHeight() / 3);
+
+        buttonRegions = new TextureRegion[3];
+        buttonBounds = new Rectangle[3];
+
+        for (int i = 0; i < 3; i++) {
+            buttonRegions[i] = tmp[i][0];
         }
-        return true;
-    }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        int height = Gdx.graphics.getHeight();
-        for (int i = 0; i < menuItems.length; i++) {
-            int itemY = height / 2 + (menuItems.length - i - 1) * 40;
-            if (screenY > itemY - 20 && screenY < itemY + 20) {
-                selectedIndex = i;
+      // posição dos botoes na tela
+        float btnWidth = 4f;
+        float btnHeight = 1.5f;
+        float startY = 4f;
+
+
+        for (int i = 0; i < 3; i++) {
+            float x = (viewport.getWorldWidth() - btnWidth) / 2f;
+            float y = startY - i * 2f;
+
+            buttonBounds[i] = new Rectangle(x, y, btnWidth, btnHeight);
+        }
+    }
+            @Override
+            public void render(float delta) {
+                // Draw your screen here. "delta" is the time since last render in seconds.
+                input();
+                logic();
+                draw();
+
+                ScreenUtils.clear(Color.BLACK);
+                viewport.apply();
+                spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+                spriteBatch.begin();
+
+                float worldWidth = viewport.getWorldWidth();
+                float worldHeight = viewport.getWorldHeight();
+
+                // fundo
+                spriteBatch.draw(background, 0, 0, worldWidth, worldHeight);
+
+                // IADE logo
+                spriteBatch.draw(logoiadeTexture, 0, 9.55f, 4f, 0.7f);
+
+                //Tamanho e posição do títilo"mascon" a frente do fundo
+                float logoWidth = 7f;
+                float logoHeight = 5f;
+                float logoX = (worldWidth - logoWidth) / 2f;
+                float logoY = worldHeight - logoHeight - 0.5f;
+
+                spriteBatch.draw(titleTexture, logoX, logoY, logoWidth, logoHeight);
+
+                for (int i = 0; i < 3; i++) {
+                    Rectangle bounds = buttonBounds[i];
+
+                    // sombra quando o mouse está sobre o botão
+                    Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    viewport.unproject(mouse);
+
+                    boolean hovered = bounds.contains(mouse.x, mouse.y);
+                    Color color = hovered ? Color.LIGHT_GRAY : Color.WHITE;
+                    spriteBatch.setColor(color);
+
+                    spriteBatch.draw(buttonRegions[i], bounds.x, bounds.y, bounds.width, bounds.height);
+
+                    // Clique
+                    if (hovered && Gdx.input.justTouched()) {
+                        handleButtonClick(i);
+                    }
+                }
+
+                spriteBatch.setColor(Color.WHITE); // reset
+
+
+                spriteBatch.end();
+
+
             }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        handleSelection();
-        return true;
-    }
-
-    private void handleSelection() {
-        switch (selectedIndex) {
-            case 0:
-                System.out.println("Jogar");
-                break; // game.setScreen(new GameScreen(game));
-            case 1:
-                System.out.println("Opções");
-                break; // game.setScreen(new OptionsScreen(game));
-            case 2:
+      // clique nos botoes
+    private void handleButtonClick(int index) {
+        switch (index) {
+            case 0: // Jogar
+                System.out.println("Iniciar jogo!");
+                break;
+            case 1: // Opções
+                System.out.println("Abrir opções.");
+                break;
+            case 2: // Sair
                 Gdx.app.exit();
                 break;
         }
     }
 
-});
-    }
     @Override
-    public void render(float delta) {
-        // Draw your screen here. "delta" is the time since last render in seconds.
-
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            selectedIndex = (selectedIndex + menuItems.length - 1) % menuItems.length;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            selectedIndex = (selectedIndex + 1) % menuItems.length;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            switch (selectedIndex) {
-                case 0:
-                    System.out.println("Iniciar jogo...");
-                    break; // game.setScreen(new GameScreen(game));
-                case 1:
-                    System.out.println("Abrir opções...");
-                    break; // game.setScreen(new OptionsScreen(game));
-                case 2:
-                    Gdx.app.exit();
-                    break;
+            public void resize(int width, int height) {
+                viewport.update(width, height, true);
+                // Resize your screen here. The parameters represent the new window size.
             }
 
+            public void draw() {
+                ScreenUtils.clear(Color.BLACK); // cor base de fundo do jogo
+                viewport.apply();
+                spriteBatch.setProjectionMatrix(viewport.getCamera().combined);// garate as imagens no local correto
+                spriteBatch.begin();
+
+                float worldWidth = viewport.getWorldWidth();
+                float worldHeight = viewport.getWorldHeight();
+
+                // posiçao e tamanho do logo iade
+                spriteBatch.draw(background, 0, 0, worldWidth, worldHeight);
+                spriteBatch.draw(logoiadeTexture, 0, 9.55f, 4f, 0.7f);
+
+                font.getData().setScale(0.1f);
+                font.setColor(Color.WHITE);
+
+                String titulo = "MascON";
+
+                GlyphLayout layout = new GlyphLayout(font, titulo);
+                float textX = (worldWidth - layout.width) / 2f;
+                float textY = worldHeight - 1.0f;
+
+                font.draw(spriteBatch, titulo, textX, textY);
+
+
+                spriteBatch.end();
+            }
+
+
+            public void input() {
+                // Invoked when your application is paused.
+            }
+
+
+            public void logic() {
+                // Invoked when your application is paused.
+            }
+
+            @Override
+            public void pause() {
+                // Invoked when your application is paused.
+            }
+
+            @Override
+            public void resume() {
+                // Invoked when your application is resumed after pause.
+            }
+
+            @Override
+            public void hide() {
+                // This method is called when another screen replaces this one.
+            }
+
+            @Override
+            public void dispose() {
+                // Destroy screen's assets here.
+
+
+                font.dispose();
+                spriteBatch.dispose();
+                background.dispose();
+                axe.dispose();
+                logoiadeTexture.dispose();
+                font.dispose();
+                music.dispose();
+                titleTexture.dispose();
+            }
         }
-        // Limpar tela
-        Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        for (int i = 0; i < menuItems.length; i++) {
-            String prefix = (i == selectedIndex) ? " " : "   ";
-            font.draw(batch, prefix + menuItems[i], 100, 300 - i * 40);
-        }
-        batch.end();
-
-
-}
-    @Override
-    public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
-    }
-
-    @Override
-    public void pause() {
-        // Invoked when your application is paused.
-    }
-
-    @Override
-    public void resume() {
-        // Invoked when your application is resumed after pause.
-    }
-
-    @Override
-    public void hide() {
-        // This method is called when another screen replaces this one.
-    }
-
-    @Override
-    public void dispose() {
-        // Destroy screen's assets here.
-
-        batch.dispose();
-        font.dispose();
-
-    }
-}
