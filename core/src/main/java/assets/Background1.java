@@ -14,7 +14,6 @@ public class Background1 {
         corredor = new Texture("background1.png");
         decoracoes = new ArrayList<>();
 
-        decoracoes.add(new Decoracao(new Texture("espinhos.png"), 400, 50));
         decoracoes.add(new Decoracao(new Texture("skeletonpendurado.png"),100,600));
 
         // Loop para múltiplos esqueletos na parede

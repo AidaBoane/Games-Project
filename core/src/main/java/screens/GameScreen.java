@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
     private Music gameMusic;
     private Background1 background1;
     private Vector2 posicaoCamera;
-    private float velocidadeCamera = 2f;
+    private float velocidadeCamera = 0.1f;
 
     public GameScreen(MainX game) {
         this.game = game;
@@ -46,12 +46,7 @@ public class GameScreen implements Screen {
         cameraComponent.follow(posicaoCamera);
         cameraComponent.update();
 
-        // obstáculos
-        renderables.add(new Plataforma("plataforma.PNG", 300, 120));
-        renderables.add(new Espinhos("espinhos.png", 500, 120));
-        Inimigo inimigo = new Inimigo("monster1.png", 700, 120);
-        renderables.add(inimigo);
-        updatables.add(inimigo);
+
 
         // Música da sala de jogo
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("gamemusic.mp3"));
@@ -65,6 +60,20 @@ public class GameScreen implements Screen {
 
         // Carregar fundo com obstáculos e decoração
         background1 = new Background1();
+        for (Plataforma p : Plataforma.gerarPlataformas()) {
+            renderables.add(p);
+        }
+        for (Espinhos p : Espinhos.gerarEspinhos()) {
+            renderables.add(p);
+        }
+        List<Inimigo> inimigos = Inimigo.gerarInimigos();
+
+        for (Inimigo inimigo : inimigos) {
+            renderables.add(inimigo);
+            updatables.add(inimigo); // movimento do monster1
+
+        }
+
     }
 
     @Override

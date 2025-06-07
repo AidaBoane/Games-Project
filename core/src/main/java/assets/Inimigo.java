@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.IRenderableComponent;
 import entity.IUpdateComponent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Inimigo implements IRenderableComponent, IUpdateComponent {
     private Texture texture;
@@ -39,5 +41,20 @@ public class Inimigo implements IRenderableComponent, IUpdateComponent {
     public void dispose() {
         texture.dispose();
     }
-}
 
+    public static List<Inimigo> gerarInimigos() {
+        List<Inimigo> inimigos = new ArrayList<>();
+
+        inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+      //  inimigos.add(new Inimigo("monster1.png", 1970, 250));
+
+        return inimigos;
+    }
+
+}
