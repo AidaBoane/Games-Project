@@ -1,0 +1,37 @@
+{
+    "MenuScreen": [
+        "OpcoesScreen",
+        "GameScreen",
+        "GameScreen2",
+        "GameScreen3"
+    ],
+    "OpcoesScreen": [
+        "MenuScreen",
+        "ComoJogarScreen"
+    ],
+    "ComoJogarScreen": [
+        "OpcoesScreen"
+    ],
+    "GameScreen": [
+        "MenuScreen",
+        "GameScreen2",
+        "GameOverScreen"
+    ],
+    "GameScreen2": [
+        "MenuScreen",
+        "GameScreen",
+        "GameScreen3",
+        "GameOverScreen"
+    ],
+    "GameScreen3": [
+        "GameScreen2",
+        "GameOverScreen",
+        "MenuScreen"
+    ],
+    "GameOverScreen": [
+        "GameScreen",
+        "GameScreen2",
+        "GameScreen3",
+        "MenuScreen"
+    ]
+}
