@@ -29,7 +29,7 @@ public class MainX extends Game {
         // screenManager.switchTo("MenuScreen");
 
         // Inicia diretamente na primeira sala
-        setScreen(new GameScreen(this));
+        setScreen(new MenuScreen(this));
     }
 
     @Override

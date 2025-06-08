@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
     private Music gameMusic;
     private Background1 background1;
     private Vector2 posicaoCamera;
-    private float velocidadeCamera = 0.1f;
+    private float velocidadeCamera = 0.5f;
 
     public GameScreen(MainX game) {
         this.game = game;

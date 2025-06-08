@@ -43,7 +43,7 @@ public class MenuScreen implements Screen {
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(19, 10.2f);
 
-        background = new Texture("menu_background.png"); // substitua pela sua imagem
+        background = new Texture("menubackground.png"); // substitua pela sua imagem
         axe = new Texture("axe.png"); // imagem do machado
         logoiadeTexture = new Texture("IADE.png");
         titleTexture = new Texture("mascon.png");

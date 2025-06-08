@@ -35,7 +35,7 @@ public class OpcoesScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture("menu_background.png");
+        backgroundTexture = new Texture("menubackground.png");
 
         Texture somTexture = new Texture("som.png");
         Texture musicaTexture = new Texture("musica.png");
