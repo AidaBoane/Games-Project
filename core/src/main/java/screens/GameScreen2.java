@@ -52,14 +52,14 @@ public class GameScreen2 implements Screen {
             background2.getWorldHeight()
         );
 
-        // Música da sala respeitando a configuração global
+
         if (AudioController.isMusicaAtivada()) {
             gameMusic = Gdx.audio.newMusic(Gdx.files.internal("gamemusic.mp3"));
             gameMusic.setLooping(true);
             gameMusic.play();
         }
 
-        // Para a música do menu, se estiver tocando
+
         if (game.musica != null && game.musica.isPlaying()) {
             game.musica.stop();
         }
@@ -104,7 +104,7 @@ public class GameScreen2 implements Screen {
         player.render(batch);
         batch.end();
 
-        // Controles
+
         boolean moving = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {

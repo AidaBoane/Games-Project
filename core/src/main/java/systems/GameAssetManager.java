@@ -3,7 +3,7 @@ package systems;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+
 
 public class GameAssetManager {
     private final AssetManager manager;
@@ -13,7 +13,7 @@ public class GameAssetManager {
     }
 
     public void loadAllAssets() {
-        // Texturas do jogador
+
         for (String anim : new String[]{"Idle_", "Run_", "Jump_", "Jump_Throw_", "Slide_", "Dead_"}) {
             for (int i = 0; i < 10; i++) {
                 String path = "player/" + String.format(anim + "%03d.png", i);
@@ -46,9 +46,7 @@ public class GameAssetManager {
         manager.load("gamemusic.mp3", Music.class);
     }
 
-    public void updateLoading() {
-        manager.update();
-    }
+
 
     public boolean isFinished() {
         return manager.update();

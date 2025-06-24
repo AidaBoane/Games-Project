@@ -20,24 +20,26 @@ public class MenuScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Texture background;
     private Texture logoiadeTexture;
+    private Texture ajudaTexture;
     private BitmapFont font;
     private FitViewport viewport;
     private Rectangle[] buttonBounds;
 
-    public MenuScreen(MainX mainX) {
-        this.game = mainX;
+    public MenuScreen(MainX game) {
+        this.game = game;
     }
 
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(19, 10.2f);
+        font = new BitmapFont();
 
         background = new Texture("menubackground.png");
         logoiadeTexture = new Texture("IADE.png");
-        font = new BitmapFont();
+       
 
-        // Música global controlada por AudioController
+
         if (game.musica == null) {
             game.musica = Gdx.audio.newMusic(Gdx.files.internal("menumusic.mp3"));
             game.musica.setLooping(true);
@@ -50,6 +52,7 @@ public class MenuScreen implements Screen {
             game.musica.play();
         }
 
+        // Botões do menu
         buttonBounds = new Rectangle[4];
         float buttonWidth = 6f;
         float buttonHeight = 0.8f;
@@ -78,8 +81,9 @@ public class MenuScreen implements Screen {
         Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(mouse);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < buttonBounds.length; i++) {
             Rectangle bounds = buttonBounds[i];
+
 
             if (bounds.contains(mouse.x, mouse.y)) {
                 spriteBatch.setColor(0, 0, 0, 0.2f);
@@ -98,17 +102,18 @@ public class MenuScreen implements Screen {
     private void handleButtonClick(int index) {
         switch (index) {
             case 0: // JOGAR
-                if (game.musica != null) {
-                    game.musica.stop();
-                }
+                if (game.musica != null) game.musica.stop();
                 game.setScreen(new GameScreen(game));
                 break;
+
             case 1: // OPÇÕES
                 game.setScreen(new OpcoesScreen(game));
                 break;
+
             case 2: // AJUDA
-                // Pode direcionar para ComoJogarScreen se estiver implementado
+                game.setScreen(new AjudaScreen(game));
                 break;
+
             case 3: // SAIR
                 Gdx.app.exit();
                 break;
@@ -129,5 +134,6 @@ public class MenuScreen implements Screen {
         spriteBatch.dispose();
         background.dispose();
         logoiadeTexture.dispose();
+        ajudaTexture.dispose();
     }
 }

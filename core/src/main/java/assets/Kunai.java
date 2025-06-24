@@ -27,11 +27,11 @@ public class Kunai {
 
     public void render(SpriteBatch batch) {
         if (velocity.x < 0) {
-            // Lança para a esquerda, espelha horizontalmente
+
             batch.draw(sharedTexture, position.x + sharedTexture.getWidth(), position.y,
                 -sharedTexture.getWidth(), sharedTexture.getHeight());
         } else {
-            // Lança para a direita, normal
+
             batch.draw(sharedTexture, position.x, position.y);
         }
     }

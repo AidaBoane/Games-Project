@@ -58,7 +58,6 @@ public class Background1 {
             decor.render(batch, parallaxX);
         }
 
-        // Tochas animadas
         for (Fire fire : fires) {
             fire.update(delta);
             fire.render(batch, parallaxX);
@@ -72,11 +71,11 @@ public class Background1 {
         Fire.disposeStatic();
     }
     public float getWorldWidth() {
-        return textureWidth * numeroDeRepeticoes; // ajuste se estiver usando tiles repetidos
+        return textureWidth * numeroDeRepeticoes;
     }
 
     public float getWorldHeight() {
-        return textureHeight; // altura do fundo (normalmente fixa)
+        return textureHeight;
     }
     private static class Decoracao {
         Texture texture;

@@ -1,12 +1,10 @@
 package systems;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import entity.CollidableComponent;
 import entity.CollisionCategory;
 import player.Player;
-import entity.PlayerState;
+
 
 import java.util.List;
 

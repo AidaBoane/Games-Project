@@ -163,7 +163,7 @@ public class Player {
             return;
         }
 
-        // BLOQUEIO DE MUDANÇA para outras animações enquanto THROW/JUMPTHROW está em execução
+
         if ((currentState == PlayerState.THROW || currentState == PlayerState.JUMPTHROW)
             && !animations.get(currentState).isAnimationFinished(stateTime)) {
             return;

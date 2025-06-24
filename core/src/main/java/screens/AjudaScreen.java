@@ -11,24 +11,20 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogicgames.MascOnX.MainX;
-import systems.AudioController;
 
-public class OpcoesScreen implements Screen {
+public class AjudaScreen implements Screen {
     private final MainX game;
     private SpriteBatch spriteBatch;
     private Texture background;
     private Texture logoIADE;
     private Texture setaVoltar;
 
-    private Rectangle somBounds;
-    private Rectangle musicaBounds;
     private Rectangle setaBounds;
 
-    private boolean somAtivo = true;
     private BitmapFont font;
     private FitViewport viewport;
 
-    public OpcoesScreen(MainX game) {
+    public AjudaScreen(MainX game) {
         this.game = game;
     }
 
@@ -38,17 +34,11 @@ public class OpcoesScreen implements Screen {
         viewport = new FitViewport(19, 10.2f);
         font = new BitmapFont();
 
-        background = new Texture("opcoesbackground.png");
+        background = new Texture("ajuda_background.png"); // <-- Altere para o fundo que desejar
         logoIADE = new Texture("IADE.png");
         setaVoltar = new Texture("voltar.png");
 
-        float buttonWidth = 6f;
-        float buttonHeight = 1.3f;
-        float x = (viewport.getWorldWidth() - buttonWidth) / 2.05f;
-
-        somBounds = new Rectangle(x, 3.9f, buttonWidth, buttonHeight);
-        musicaBounds = new Rectangle(x, 2.2f, buttonWidth, buttonHeight);
-        setaBounds = new Rectangle(0.2f, 8.7f, 1f, 1f);
+        setaBounds = new Rectangle(0.2f, 8.7f, 1f, 1f); // Mesma posição do botão voltar
     }
 
     @Override
@@ -66,42 +56,11 @@ public class OpcoesScreen implements Screen {
         spriteBatch.draw(logoIADE, 0, 9.55f, 4f, 0.7f);
         spriteBatch.draw(setaVoltar, setaBounds.x, setaBounds.y, setaBounds.width, setaBounds.height);
 
-
-        if (somBounds.contains(mouse.x, mouse.y)) {
-            spriteBatch.setColor(0, 0, 0, 0.2f);
-            spriteBatch.draw(background, somBounds.x, somBounds.y, somBounds.width, somBounds.height);
-            spriteBatch.setColor(Color.WHITE);
-            if (Gdx.input.justTouched()) {
-                somAtivo = !somAtivo;
-
-            }
-        }
-
-        if (musicaBounds.contains(mouse.x, mouse.y)) {
-            spriteBatch.setColor(0, 0, 0, 0.2f);
-            spriteBatch.draw(background, musicaBounds.x, musicaBounds.y, musicaBounds.width, musicaBounds.height);
-            spriteBatch.setColor(Color.WHITE);
-
-            if (Gdx.input.justTouched()) {
-                boolean novaPreferencia = !AudioController.isMusicaAtivada();
-                AudioController.setMusicaAtivada(novaPreferencia);
-
-
-                if (game.musica != null) {
-                    if (novaPreferencia) {
-                        game.musica.play();
-                    } else {
-                        game.musica.stop();
-                    }
-                }
-            }
-        }
-
-
         if (setaBounds.contains(mouse.x, mouse.y)) {
             spriteBatch.setColor(0, 0, 0, 0.2f);
             spriteBatch.draw(setaVoltar, setaBounds.x, setaBounds.y, setaBounds.width, setaBounds.height);
             spriteBatch.setColor(Color.WHITE);
+
             if (Gdx.input.justTouched()) {
                 game.setScreen(new MenuScreen(game));
             }
@@ -110,8 +69,7 @@ public class OpcoesScreen implements Screen {
         spriteBatch.end();
     }
 
-    @Override
-    public void resize(int width, int height) {
+    @Override public void resize(int width, int height) {
         viewport.update(width, height, true);
     }
 

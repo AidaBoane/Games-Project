@@ -13,7 +13,7 @@ public class CameraComponent {
     private float lerp = 0.1f;
 
     public CameraComponent(float viewportWidth, float viewportHeight, float worldWidth, float worldHeight) {
-        camera = new OrthographicCamera(viewportWidth * 1.2f, viewportHeight * 1.2f); // zoom out
+        camera = new OrthographicCamera(viewportWidth * 1.2f, viewportHeight * 1.2f);
         camera.position.set(viewportWidth / 2f, viewportHeight / 2f, 0);
         camera.update();
 
@@ -27,10 +27,10 @@ public class CameraComponent {
     }
 
     public void update(Vector2 newTarget) {
-        follow(newTarget); // atualiza o alvo
+        follow(newTarget);
         camera.position.lerp(new Vector3(target.x, target.y, 0), lerp);
 
-        // limites de mundo
+
         float halfWidth = camera.viewportWidth / 2f;
         float halfHeight = camera.viewportHeight / 2f;
 

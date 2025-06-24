@@ -37,8 +37,8 @@ public class Background2 {
         //  Tochas animadas ao longo do corredor
         fires = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            float x = -670 + i * 1300;  // espaçamento entre tochas
-            float y = 300;             // altura
+            float x = -670 + i * 1300;
+            float y = 300;
             fires.add(new Fire(new Vector2(x, y)));
 
         }
@@ -58,7 +58,7 @@ public class Background2 {
             decor.render(batch, parallaxX);
         }
 
-        //tochas
+
         for (Fire fire : fires) {
             fire.update(delta);
             fire.render(batch, parallaxX);
@@ -72,11 +72,11 @@ public class Background2 {
         Fire.disposeStatic();
     }
     public float getWorldWidth() {
-        return textureWidth * numeroDeRepeticoes; // ajuste se estiver usando tiles repetidos
+        return textureWidth * numeroDeRepeticoes;
     }
 
     public float getWorldHeight() {
-        return textureHeight; // altura do fundo (normalmente fixa)
+        return textureHeight;
     }
     private static class Decoracao {
         Texture texture;

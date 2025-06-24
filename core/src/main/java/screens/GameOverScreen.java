@@ -23,7 +23,7 @@ public class GameOverScreen implements Screen {
     public void show() {
         batch = game.batch;
         gameOverTexture = new Texture(Gdx.files.internal("gameover.png"));
-        exitTexture = new Texture(Gdx.files.internal("exit.png")); // opcional
+        exitTexture = new Texture(Gdx.files.internal("exit.png"));
     }
 
     @Override

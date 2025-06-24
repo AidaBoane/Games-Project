@@ -32,8 +32,8 @@ public class ScreenManager {
                 case "OpcoesScreen":
                     game.setScreen(new OpcoesScreen(game));
                     break;
-                case "ComoJogarScreen":
-                    game.setScreen(new ComoJogarScreen(game));
+                case "AjudaScreen":
+                    game.setScreen(new AjudaScreen(game));
                     break;
                 case "GameScreen":
                     game.setScreen(new GameScreen(game));

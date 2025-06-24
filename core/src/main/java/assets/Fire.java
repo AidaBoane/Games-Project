@@ -27,7 +27,7 @@ public class Fire {
 
     private void loadAnimation() {
         try {
-            fireSheet = new Texture(Gdx.files.internal("fire.png")); // ✅ Certifique-se de que o nome do arquivo é simples e está em assets/
+            fireSheet = new Texture(Gdx.files.internal("fire.png"));
         } catch (Exception e) {
             System.err.println("Erro ao carregar fire.png: " + e.getMessage());
             return;

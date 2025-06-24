@@ -6,5 +6,5 @@ public enum ScreenType {
     GAME,
     GAME2,
     GAMEOVER,
-    COMOJOGAR
+    AJUDA
 }

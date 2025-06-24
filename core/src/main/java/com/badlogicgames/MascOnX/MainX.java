@@ -29,7 +29,7 @@ public class MainX extends Game {
 
         screenGraph.addScreen("MenuScreen", new MenuScreen(this));
         screenGraph.addScreen("OpcoesScreen", new OpcoesScreen(this));
-        screenGraph.addScreen("ComoJogarScreen", new ComoJogarScreen(this));
+        screenGraph.addScreen("ComoJogarScreen", new AjudaScreen(this));
         screenGraph.addScreen("GameScreen", new GameScreen(this));
         screenGraph.addScreen("GameScreen2", new GameScreen2(this));
         screenGraph.addScreen("GameOverScreen", new GameOverScreen(this));

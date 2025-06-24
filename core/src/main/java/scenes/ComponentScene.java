@@ -9,7 +9,7 @@ public class ComponentScene {
     private Texture heartTexture;
     private int heartsRemaining = 3;
 
-    // Tamanho e espaçamento dos corações
+
     private final int HEART_WIDTH = 35;
     private final int HEART_HEIGHT = 32;
     private final int SPACING = 10;

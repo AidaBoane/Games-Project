@@ -15,8 +15,7 @@ public class Portal implements IRenderableComponent, IUpdateComponent {
     private float tempoParado = 0f;
     private boolean iniciouTransicao = false;
 
-    private final float TEMPO_ESPERA = 2.0f; // Tempo que o player deve permanecer parado
-
+    private final float TEMPO_ESPERA = 2.0f;
     public Portal(float x, float y) {
         this.x = x;
         this.y = y;
@@ -39,7 +38,7 @@ public class Portal implements IRenderableComponent, IUpdateComponent {
             tempoParado += delta;
          if (tempoParado >= TEMPO_ESPERA && !iniciouTransicao) {
           iniciouTransicao = true;
-          player.setTeleporting(true); // ativa efeito de fade no player
+          player.setTeleporting(true);
           }
          } else {
            tempoParado = 0f;
