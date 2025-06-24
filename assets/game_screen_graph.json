@@ -3,14 +3,15 @@
         "OpcoesScreen",
         "GameScreen",
         "GameScreen2",
-        "GameScreen3"
+
     ],
-    "OpcoesScreen": [
+    "OpcoesesScreen": [
         "MenuScreen",
-        "ComoJogarScreen"
+      "GameScreen",
+      "GameScreen2"
     ],
     "ComoJogarScreen": [
-        "OpcoesScreen"
+        "MenuScreen"
     ],
     "GameScreen": [
         "MenuScreen",
@@ -20,18 +21,12 @@
     "GameScreen2": [
         "MenuScreen",
         "GameScreen",
-        "GameScreen3",
         "GameOverScreen"
     ],
-    "GameScreen3": [
-        "GameScreen2",
-        "GameOverScreen",
-        "MenuScreen"
-    ],
+
     "GameOverScreen": [
         "GameScreen",
         "GameScreen2",
-        "GameScreen3",
         "MenuScreen"
     ]
 }

@@ -4,32 +4,59 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import screens.GameScreen;
-import screens.MenuScreen;
-import screens.OpcoesScreen;
-import screens.ScreenManager;
+import entity.ScreenGraph;
+import screens.*;
+import systems.AudioController;
 
 public class MainX extends Game {
-    public ScreenManager screenManager;
     public SpriteBatch batch;
-    public Music musica;  // música do menu
+    public Music musica;
+    public ScreenGraph screenGraph;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
 
-        // Inicia com a música do menu
         musica = Gdx.audio.newMusic(Gdx.files.internal("menumusic.mp3"));
         musica.setLooping(true);
-        musica.play();
+        musica.setVolume(0.5f);
 
-        // Exemplo: se quiser usar menu no futuro com navegação via screenManager:
-        // Map<String, List<String>> graph = GraphLoader.loadGraph("assets/game_screen_graph.json");
-        // screenManager = new ScreenManager(this, graph, "MenuScreen");
-        // screenManager.switchTo("MenuScreen");
+        if (AudioController.isMusicaAtivada()) {
+            musica.play();
+        }
 
-        // Inicia diretamente na primeira sala
-        setScreen(new MenuScreen(this));
+       screenGraph = new ScreenGraph(this);
+
+        screenGraph.addScreen("MenuScreen", new MenuScreen(this));
+        screenGraph.addScreen("OpcoesScreen", new OpcoesScreen(this));
+        screenGraph.addScreen("ComoJogarScreen", new ComoJogarScreen(this));
+        screenGraph.addScreen("GameScreen", new GameScreen(this));
+        screenGraph.addScreen("GameScreen2", new GameScreen2(this));
+        screenGraph.addScreen("GameOverScreen", new GameOverScreen(this));
+
+        screenGraph.connectScreens("MenuScreen", "OpcoesScreen");
+        screenGraph.connectScreens("MenuScreen", "GameScreen");
+        screenGraph.connectScreens("MenuScreen", "GameScreen2");
+
+        screenGraph.connectScreens("OpcoesScreen", "MenuScreen");
+        screenGraph.connectScreens("OpcoesScreen", "GameScreen");
+        screenGraph.connectScreens("OpcoesScreen", "GameScreen2");
+
+        screenGraph.connectScreens("ComoJogarScreen", "MenuScreen");
+
+        screenGraph.connectScreens("GameScreen", "MenuScreen");
+        screenGraph.connectScreens("GameScreen", "GameScreen2");
+        screenGraph.connectScreens("GameScreen", "GameOverScreen");
+
+        screenGraph.connectScreens("GameScreen2", "MenuScreen");
+        screenGraph.connectScreens("GameScreen2", "GameScreen");
+        screenGraph.connectScreens("GameScreen2", "GameOverScreen");
+
+        screenGraph.connectScreens("GameOverScreen", "GameScreen");
+        screenGraph.connectScreens("GameOverScreen", "GameScreen2");
+        screenGraph.connectScreens("GameOverScreen", "MenuScreen");
+
+        screenGraph.setInitialScreen("MenuScreen");
     }
 
     @Override

@@ -1,30 +1,32 @@
- package screens;
+package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogicgames.MascOnX.MainX;
+import systems.AudioController;
 
 public class OpcoesScreen implements Screen {
-
     private final MainX game;
-    private Stage stage;
-    private Texture backgroundTexture;
+    private SpriteBatch spriteBatch;
+    private Texture background;
+    private Texture logoIADE;
+    private Texture setaVoltar;
+
+    private Rectangle somBounds;
+    private Rectangle musicaBounds;
+    private Rectangle setaBounds;
 
     private boolean somAtivo = true;
-    private boolean musicaAtiva = true;
-
-    private ImageButton somButton;
-    private ImageButton musicaButton;
-    private ImageButton ajudaButton;
+    private BitmapFont font;
+    private FitViewport viewport;
 
     public OpcoesScreen(MainX game) {
         this.game = game;
@@ -32,96 +34,98 @@ public class OpcoesScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        spriteBatch = new SpriteBatch();
+        viewport = new FitViewport(19, 10.2f);
+        font = new BitmapFont();
 
-        backgroundTexture = new Texture("menubackground.png");
+        background = new Texture("opcoesbackground.png");
+        logoIADE = new Texture("IADE.png");
+        setaVoltar = new Texture("voltar.png");
 
-        Texture somTexture = new Texture("som.png");
-        Texture musicaTexture = new Texture("musica.png");
-        Texture ajudaTexture = new Texture("ajuda.png");
+        float buttonWidth = 6f;
+        float buttonHeight = 1.3f;
+        float x = (viewport.getWorldWidth() - buttonWidth) / 2.05f;
 
-        somButton = new ImageButton(new TextureRegionDrawable(somTexture));
-        musicaButton = new ImageButton(new TextureRegionDrawable(musicaTexture));
-        ajudaButton = new ImageButton(new TextureRegionDrawable(ajudaTexture));
-
-        // Dimensões reais da imagem dos botões
-        float buttonWidth = somButton.getWidth();
-        float buttonHeight = somButton.getHeight();
-        float espacamento = 20f;
-
-        float centerX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
-        float totalHeight = 3f * buttonHeight + 2 * espacamento;
-        float startY = Gdx.graphics.getHeight() / 2f - totalHeight / 2f;
-
-        somButton.setPosition(centerX, startY + (buttonHeight + espacamento) * 2);
-        musicaButton.setPosition(centerX, startY + (buttonHeight + espacamento));
-        ajudaButton.setPosition(centerX, startY);
-
-        // Listeners
-        somButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                somAtivo = !somAtivo;
-                updateSomButton();
-            }
-        });
-
-        musicaButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                musicaAtiva = !musicaAtiva;
-                updateMusicaButton();
-                if (musicaAtiva) {
-                    game.musica.play();
-                } else {
-                    game.musica.pause();
-                }
-            }
-        });
-
-        ajudaButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new ComoJogarScreen(game));
-            }
-        });
-
-        updateSomButton();
-        updateMusicaButton();
-
-        stage.addActor(somButton);
-        stage.addActor(musicaButton);
-        stage.addActor(ajudaButton);
-    }
-
-    private void updateSomButton() {
-        somButton.setColor(somAtivo ? Color.WHITE : Color.DARK_GRAY);
-    }
-
-    private void updateMusicaButton() {
-        musicaButton.setColor(musicaAtiva ? Color.WHITE : Color.DARK_GRAY);
+        somBounds = new Rectangle(x, 3.9f, buttonWidth, buttonHeight);
+        musicaBounds = new Rectangle(x, 2.2f, buttonWidth, buttonHeight);
+        setaBounds = new Rectangle(0.2f, 8.7f, 1f, 1f);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        game.batch.begin();
-        game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        game.batch.end();
-        stage.act(delta);
-        stage.draw();
+        ScreenUtils.clear(Color.BLACK);
+        viewport.apply();
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+
+        Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mouse);
+
+        spriteBatch.begin();
+
+        spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        spriteBatch.draw(logoIADE, 0, 9.55f, 4f, 0.7f);
+        spriteBatch.draw(setaVoltar, setaBounds.x, setaBounds.y, setaBounds.width, setaBounds.height);
+
+        // Botão SOM (ainda local, controle apenas visual)
+        if (somBounds.contains(mouse.x, mouse.y)) {
+            spriteBatch.setColor(0, 0, 0, 0.2f);
+            spriteBatch.draw(background, somBounds.x, somBounds.y, somBounds.width, somBounds.height);
+            spriteBatch.setColor(Color.WHITE);
+            if (Gdx.input.justTouched()) {
+                somAtivo = !somAtivo;
+                // Implementar som global se necessário
+            }
+        }
+
+        // Botão MÚSICA GLOBAL ON/OFF
+        if (musicaBounds.contains(mouse.x, mouse.y)) {
+            spriteBatch.setColor(0, 0, 0, 0.2f);
+            spriteBatch.draw(background, musicaBounds.x, musicaBounds.y, musicaBounds.width, musicaBounds.height);
+            spriteBatch.setColor(Color.WHITE);
+
+            if (Gdx.input.justTouched()) {
+                boolean novaPreferencia = !AudioController.isMusicaAtivada();
+                AudioController.setMusicaAtivada(novaPreferencia);
+
+                // Reflete imediatamente a mudança na música do menu
+                if (game.musica != null) {
+                    if (novaPreferencia) {
+                        game.musica.play();
+                    } else {
+                        game.musica.stop();
+                    }
+                }
+            }
+        }
+
+        // Botão VOLTAR
+        if (setaBounds.contains(mouse.x, mouse.y)) {
+            spriteBatch.setColor(0, 0, 0, 0.2f);
+            spriteBatch.draw(setaVoltar, setaBounds.x, setaBounds.y, setaBounds.width, setaBounds.height);
+            spriteBatch.setColor(Color.WHITE);
+            if (Gdx.input.justTouched()) {
+                game.setScreen(new MenuScreen(game));
+            }
+        }
+
+        spriteBatch.end();
     }
 
-    @Override public void resize(int width, int height) {}
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height, true);
+    }
+
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}
 
     @Override
     public void dispose() {
-        stage.dispose();
-        backgroundTexture.dispose();
-        ((TextureRegionDrawable) somButton.getStyle().imageUp).getRegion().getTexture().dispose();
-        ((TextureRegionDrawable) musicaButton.getStyle().imageUp).getRegion().getTexture().dispose();
-        ((TextureRegionDrawable) ajudaButton.getStyle().imageUp).getRegion().getTexture().dispose();
-
+        spriteBatch.dispose();
+        background.dispose();
+        logoIADE.dispose();
+        setaVoltar.dispose();
+        font.dispose();
     }
 }

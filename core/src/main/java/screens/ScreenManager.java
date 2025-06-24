@@ -41,9 +41,6 @@ public class ScreenManager {
                 case "GameScreen2":
                     game.setScreen(new GameScreen2(game));
                     break;
-                case "GameScreen3":
-                    game.setScreen(new GameScreen3(game));
-                    break;
                 case "GameOverScreen":
                     game.setScreen(new GameOverScreen(game));
                     break;

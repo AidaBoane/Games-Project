@@ -1,0 +1,12 @@
+.gitkeep
+IADE.png
+axecut.mp3
+espinhos.png
+game_screen_graph.json
+gamemusic.mp3
+menubackground.png
+menumusic.mp3
+monster1.png
+plataforma_longa.png
+plataforma_media.png
+skeletonpendurado.png

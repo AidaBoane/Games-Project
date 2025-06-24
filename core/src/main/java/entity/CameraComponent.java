@@ -5,31 +5,50 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class CameraComponent {
+
     public OrthographicCamera camera;
-    public Vector2 target;
-    public float lerp = 0.1f; // mais suave
+    private Vector2 target;
+    private float worldWidth;
+    private float worldHeight;
+    private float lerp = 0.1f;
 
-    public CameraComponent(float viewportWidth, float viewportHeight) {
-        camera = new OrthographicCamera(viewportWidth * 1.3f, viewportHeight * 1.3f); // Zoom out aplicado
-        float startX = viewportWidth / 1f;
-        float startY = viewportHeight / 1.5f;
-
-        camera.position.set(startX, startY, 0);
-        target = new Vector2(startX, startY); // Inicializa o target igual à posição
+    public CameraComponent(float viewportWidth, float viewportHeight, float worldWidth, float worldHeight) {
+        camera = new OrthographicCamera(viewportWidth * 1.2f, viewportHeight * 1.2f); // zoom out
+        camera.position.set(viewportWidth / 2f, viewportHeight / 2f, 0);
         camera.update();
+
+        this.target = new Vector2(camera.position.x, camera.position.y);
+        this.worldWidth = worldWidth;
+        this.worldHeight = worldHeight;
     }
 
-    public void follow(Vector2 playerPosition) {
-        target.set(playerPosition);
+    public void follow(Vector2 newTarget) {
+        this.target.set(newTarget);
     }
 
-    public void update() {
-
+    public void update(Vector2 newTarget) {
+        follow(newTarget); // atualiza o alvo
         camera.position.lerp(new Vector3(target.x, target.y, 0), lerp);
+
+        // limites de mundo
+        float halfWidth = camera.viewportWidth / 2f;
+        float halfHeight = camera.viewportHeight / 2f;
+
+        camera.position.x = Math.max(halfWidth, Math.min(camera.position.x, worldWidth - halfWidth));
+        camera.position.y = Math.max(halfHeight, Math.min(camera.position.y, worldHeight - halfHeight));
+
         camera.update();
     }
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public float getViewportWidth() {
+        return camera.viewportWidth;
+    }
+
+    public float getViewportHeight() {
+        return camera.viewportHeight;
     }
 }
